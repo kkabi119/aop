@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="
+	    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">          
+			
+    <bean id="testService" class="spring.aop.pojo.core.TestServiceImpl"/>
+    
+    <bean id="logging" class="spring.aop.pojo.LoggingAspect"/>
+    
+    <bean id="afterAdvice" class="spring.aop.pojo.AfterAdvice"/>
+    
+    <!-- aop 네임스페이스를 이용한 AOP 적용 -->
+    
+    <aop:config>
+    	<aop:pointcut expression="execution(public * spring.aop.pojo.core.*.*(..))" id="publicMethod"/>
+    	<aop:advisor advice-ref="afterAdvice" pointcut-ref="publicMethod"/>
+    	<aop:aspect ref="logging">
+    		<aop:before method="beforeLogging" pointcut-ref="publicMethod"/>
+    		<aop:after-returning method="returningLogging" pointcut-ref="publicMethod" returning="ret"/>
+    		<aop:after-throwing method="throwingLogging" pointcut-ref="publicMethod" throwing="ex"/>
+    		<aop:after method="afterLogging" pointcut-ref="publicMethod"/>
+    	</aop:aspect>
+    </aop:config>
+    
+</beans>  

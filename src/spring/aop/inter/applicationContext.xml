@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="
+	    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">          
+			
+    <bean id="testService" class="spring.aop.inter.TestServiceImpl"/>
+    
+    <!-- 자동으로 Advisor 적용 -->
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
+    
+    <!-- Advice : 공통사항 -->
+    <bean id="interAdvice" class="spring.aop.inter.InterceptorAdvice"/>
+    
+    <!-- Advisor 설정 : Pointcut 설정과 동시에 설정 -->
+    <bean id="myAdvisor" class="org.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor">
+    	<property name="advice" ref="interAdvice"/>
+    	<property name="expression" value="execution(public * *(..))"/><!-- public 리턴타입 메소드명(인자의개수가 0개 이상) -->
+    </bean>
+  
+    
+</beans>  
